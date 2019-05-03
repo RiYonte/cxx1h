@@ -11,10 +11,11 @@ from .forms import TagForm
 
 
 def student_list(request):
+
     # major = Major.objects.all().order_by('mname')
     # grade = Grade.objects.all().order_by('gname')
     students = Student.objects.all().order_by('sid')
-    context = {'students': students, 'g':'全部', 'm':'全部', 'b':'全部' }
+    context = {'students': students, 'g': '全部', 'm': '全部', 'b': '全部', }
     if request.GET:
         grade = request.GET['sgrade']
         major = request.GET['smajor']
@@ -25,16 +26,19 @@ def student_list(request):
             students = students.filter(smajor=major)
         if banji != '全部':
             students = students.filter(sbanji=banji)
-        context = {'students': students, 'g':grade, 'm':major, 'b':banji }
+        context = {'students': students, 'g': grade, 'm': major, 'b': banji, }
     return render(request, 'stdsys/list.html', context)
 
 
 def student_detail(request, id):
+    grade = request.GET['sgrade']
+    major = request.GET['smajor']
+    banji = request.GET['sbanji']
     student = Student.objects.get(id=id)
     alltags = Tag.objects.all()
     nothavetags = alltags.difference(student.tag.all())
     # 需要传递给模板的对象
-    context = {'student': student, 'nothavetags': nothavetags}
+    context = {'student': student, 'nothavetags': nothavetags, 'g': grade, 'm': major, 'b': banji, }
     # 载入模板，并返回context对象
     return render(request, 'stdsys/detail.html', context)
 

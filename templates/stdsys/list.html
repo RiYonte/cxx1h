@@ -8,6 +8,103 @@
 
 <!-- 写入 base.html 中定义的 content -->
 {% block content %}
+<div class="mdui-container-fluid">
+  <div class="mdui-row">
+    <div class="mdui-m-t-3 mdui-col">
+      <div class="row">
+        <div class="mdui-col-lg-1"><h3>筛选条件</h3></div>
+        <div class="mdui-col-lg-10">
+        
+
+
+
+            <form method="get" action="{% url 'stdsys:student_list'%}">
+  
+                  <label for="sgrade">年级: </label>
+                  <select class="mdui-select" mdui-select name="sgrade" id="sgrade">
+                    <option>全部</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                  </select>
+
+    
+                  <label for="smajor">专业: </label>
+                  <select class="mdui-select" mdui-select name="smajor" id="smajor">
+                    <option>全部</option>
+                    <option>采矿工程</option>
+                    <option>工业工程</option>
+                    <option>安全工程</option>
+                    <option>工程力学</option>
+                  </select>
+   
+     
+                  <label for="sbanji">班级: </label>
+                  <select class="mdui-select" mdui-select name="sbanji" id="sbanji">
+                    <option>全部</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                  </select>
+       
+    
+      
+                  <button type="submit" class="btn btn-primary">筛选</button>
+      
+              </form>
+
+
+
+
+
+
+      </div>
+      </div>
+      <div class="mdui-col">
+        <div class="mdui-table-fluid">
+          <table class="mdui-table mdui-table-hoverable">
+            <thead>
+              <th>学号</th>
+              <th>姓名</th>
+              <th>班级</th>
+              <th>性别</th>
+              <th>标签</th>
+            </thead>
+            <tbody>
+              {% for student in students %}
+              <tr onclick="location='{% url 'stdsys:student_detail' student.id %}?sgrade={{ g }}&smajor={{ m }}&sbanji={{ b }}'">
+                <td>{{ student.sid }}</td>
+                <td>
+                  <div class="mdui-typo">
+                    <strong>
+                      {{ student.sname }}
+                    </strong>
+                  </div>
+                </td>
+                <td>{{ student.sclass }}</td>
+                <td>{{ student.ssex }}</td>
+                <td>
+                  {% for tag in student.tag.all %}
+                  {% if tag.tname != '学生' and tag.tdisplay %}
+                  <span class="badge badge-{{ tag.tcolor }}">{{ tag.tname }}</span>
+                  {% endif %}
+                  {% endfor %}
+                </td>
+
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
 <div class="container-fluid">
   <div class="row my-5 justify-content-center">
     <div class="col-12">
@@ -47,46 +144,45 @@
           </div>
           <div class="form-group col-2">
 
-              <button type="submit" class="btn btn-primary">筛选</button>
+            <button type="submit" class="btn btn-primary">筛选</button>
 
           </div>
         </form>
       </div>
     </div>
-    <div class="list-group col-10 my-5">
-      <li class="list-group-item">
-        <div class="row text-center">
-          <div class="col">学号</div>
-          <div class="col">姓名</div>
-          <div class="col">班级</div>
-          <div class="col">性别</div>
-          <div class="col">类别</div>
-        </div>
-      </li>
-      {% for student in students %}
-      <a href="{% url 'stdsys:student_detail' student.id %}"
-        class="list-group-item list-group-item-action">
-        <div class="row">
 
-          <div class="col text-center">{{ student.sid }}</div>
-          <div class="col text-center">
-            <h5>{{ student.sname }}</h5>
-          </div>
-          <div class="col text-center">{{ student.sclass }}</div>
-          <div class="col text-center">{{ student.ssex }}</div>
-          <div class="col">
-            {% for tag in student.tag.all %}
-            {% if tag.tname != '学生' and tag.tdisplay %}
-            <span class="badge badge-{{ tag.tcolor }}">{{ tag.tname }}</span>
-            {% endif %}
-            {% endfor %}
-          </div>
 
-        </div>
-      </a>
-      {% endfor %}
-    </div>
+
+
+
+
+
   </div>
 </div>
 
-{% endblock content %}
+
+
+
+
+<select class="mdui-select" mdui-select>
+    <option value="1">State 1</option>
+    <option value="2">State 2</option>
+    <option value="3" disabled>State 3</option>
+    <option value="4">State 4</option>
+    <option value="5">State 5</option>
+    <option value="6">State 6</option>
+  </select><select class="mdui-select" mdui-select>
+    <option value="1">State 1</option>
+    <option value="2">State 2</option>
+    <option value="3" disabled>State 3</option>
+    <option value="4">State 4</option>
+    <option value="5">State 5</option>
+    <option value="6">State 6</option>
+  </select><select class="mdui-select" mdui-select>
+    <option value="1">State 1</option>
+    <option value="2">State 2</option>
+    <option value="3" disabled>State 3</option>
+    <option value="4">State 4</option>
+    <option value="5">State 5</option>
+    <option value="6">State 6</option>
+  </select>
