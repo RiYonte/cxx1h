@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+管理标签
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+<div class="container-fluid">
+    <div class="row my-5 justify-content-center">
+        <div class="list-group col-8">
+            <li class="list-group-item">
+                <div class="row text-center">
+                    <div class="col-5">标签名</div>
+                    <div class="col-5">颜色</div>
+                </div>
+            </li>
+
+            <a href="#" class="list-group-item list-group-item-action ">
+                <div class="row">
+                    {% for tag in tags %}
+                    {% if tag.tname != '学生' %}
+                    <div class="col-5 text-center">{{ tag.tname }}</div>
+                    <div class="col-5 text-center list-group-item-{{ tag.tcolor }}">{{ tag.tcolor }}</div>
+                    <div class="col-2">
+                    <div class="row justify-content-center">
+                        <div class=" col-6">
+                            <button onclick="tag_del('{% url 'stdsys:tag_del' tag.id %}')" type="button"
+                                class="btn btn-primary">删除</button>
+                        </div>
+                    
+              
+                        <div class=" col-6">
+                            {% if tag.tdisplay %}
+                            <button onclick="window.location.href='{% url "stdsys:tag_display" tag.id %}'" type="button"
+                                class="btn btn-success">隐藏</button>
+                            {% else %}
+                            <button onclick="window.location.href='{% url "stdsys:tag_display" tag.id %}'" type="button"
+                                class="btn btn-secondary">显示</button>
+                            {% endif %}
+                        </div>
+                   
+                    </div>
+                </div>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="container">
+                        <form class="row" method="post" action="{% url 'stdsys:tag_manage'%}">
+                            {% csrf_token %}
+                            <div class="form-group col-5">
+                                <input type="text" class="form-control" name="tname" id="tname">
+                            </div>
+                            <div class="form-group col-5">
+                                <input type="text" class="form-control" name="tcolor" id="tcolor" value="warning" > 
+                            </div>
+                            <div class=" col-2 ">
+                             
+                                    <button type="submit" class="btn btn-primary">添加</button>
+                             
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function tag_del(delurl) {
+        // 调用layer弹窗组件
+        layer.open({
+
+            title: "确认删除这个标签吗？",
+            // 正文
+            content: "标签删除后，即使有学生已被改标签标注也不会再显示！！",
+            // 点击确定按钮后调用的回调函数
+            yes: function (index, layero) {
+                // 指定应当前往的 url
+                location.href = delurl
+            },
+        })
+    }
+</script>
+
+{% endblock content %}

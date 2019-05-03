@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+导入学生数据
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center my-5">
+        <div class="col-7">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3 class="card-title">导入Excle </h3>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <form action="{% url 'stdsys:student_import'%}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                              <label for="my_file">选择一个表格</label>
+                              <input type="file" class="btn btn-info form-control-file" name="my_file" id="my_file">
+                            </div>
+                            <fieldset class="form-group row">
+                                <legend class="col-form-legend col-sm-1-12 text-center">请选择格式为.xlsx的文件</legend>
+                            </fieldset>
+                            <div class="form-group row justify-content-center">
+                                <div class="col-3">
+                                    <button type="submit" class="btn btn-primary">导入</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    注意格式哈
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

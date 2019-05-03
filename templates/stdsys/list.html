@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+学生列表查看
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+<div class="container-fluid">
+  <div class="row my-5 justify-content-center">
+    <div class="col-12">
+      <div class="container">
+        <form class="row" method="get" action="{% url 'stdsys:student_list'%}">
+          <div class="form-group col-2">
+            <label for="sgrade">年级 : {{ g }}</label>
+            <select class="form-control" name="sgrade" id="sgrade">
+              <option>全部</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+              <option>18</option>
+            </select>
+          </div>
+          <div class="form-group col-2">
+            <label for="smajor">专业 : {{ m }}</label>
+            <select class="form-control" name="smajor" id="smajor">
+              <option>全部</option>
+              <option>采矿工程</option>
+              <option>工业工程</option>
+              <option>安全工程</option>
+              <option>工程力学</option>
+            </select>
+          </div>
+          <div class="form-group col-2">
+            <label for="sbanji">班级 : {{ b }}</label>
+            <select class="form-control" name="sbanji" id="sbanji">
+              <option>全部</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+            </select>
+          </div>
+          <div class="form-group col-2">
+
+              <button type="submit" class="btn btn-primary">筛选</button>
+
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="list-group col-10 my-5">
+      <li class="list-group-item">
+        <div class="row text-center">
+          <div class="col">学号</div>
+          <div class="col">姓名</div>
+          <div class="col">班级</div>
+          <div class="col">性别</div>
+          <div class="col">类别</div>
+        </div>
+      </li>
+      {% for student in students %}
+      <a href="{% url 'stdsys:student_detail' student.id %}"
+        class="list-group-item list-group-item-action">
+        <div class="row">
+
+          <div class="col text-center">{{ student.sid }}</div>
+          <div class="col text-center">
+            <h5>{{ student.sname }}</h5>
+          </div>
+          <div class="col text-center">{{ student.sclass }}</div>
+          <div class="col text-center">{{ student.ssex }}</div>
+          <div class="col">
+            {% for tag in student.tag.all %}
+            {% if tag.tname != '学生' and tag.tdisplay %}
+            <span class="badge badge-{{ tag.tcolor }}">{{ tag.tname }}</span>
+            {% endif %}
+            {% endfor %}
+          </div>
+
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
