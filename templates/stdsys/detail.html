@@ -20,7 +20,7 @@
           <div class="col">
             {% for tag in student.tag.all %}
             {% if tag.tname != '学生' and tag.tdisplay %}
-            <a href="{% url 'stdsys:student_tag_del' student.id tag.id %}" class="badge badge-{{ tag.tcolor }}"
+            <a href="{% url 'stdsys:student_tag_del' student.id tag.id %}?sgrade={{ g }}&smajor={{ m }}&sbanji={{ b }}&ssex={{ x }}" class="badge badge-{{ tag.tcolor }}"
               data-toggle="tooltip" data-placement="top" title="删除这个标签">{{ tag.tname }}</a>
             {% endif %}
             {% endfor %}
@@ -28,7 +28,7 @@
           <div class="col">
             {% for tag in nothavetags %}
             {% if tag.tdisplay %}
-            <a href="{% url 'stdsys:student_tag_add' student.id tag.id %}" class="badge badge-secondary"
+            <a href="{% url 'stdsys:student_tag_add' student.id tag.id %}?sgrade={{ g }}&smajor={{ m }}&sbanji={{ b }}&ssex={{ x }}" class="badge badge-secondary"
               data-toggle="tooltip" data-placement="top" title="添加这个标签">{{ tag.tname }}</a>
             {% endif %}
             {% endfor %}
@@ -58,7 +58,7 @@
     </div>
   </div>
 </div>
-<button onclick="location='{% url 'stdsys:student_list' %}?sgrade={{ g }}&smajor={{ m }}&sbanji={{ b }}'" class="mdui-fab mdui-fab-fixed mdui-color-theme-accent mdui-ripple"><i
+<button onclick="location='{% url 'stdsys:student_list' %}?sgrade={{ g }}&smajor={{ m }}&sbanji={{ b }}&ssex={{ x }}'" class="mdui-fab mdui-fab-fixed mdui-color-theme-accent mdui-ripple"><i
   class="mdui-icon material-icons">reply</i></button>
 
 <script>

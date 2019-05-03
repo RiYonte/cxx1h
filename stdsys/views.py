@@ -14,19 +14,23 @@ def student_list(request):
 
     # major = Major.objects.all().order_by('mname')
     # grade = Grade.objects.all().order_by('gname')
+    alltags = Tag.objects.all()
     students = Student.objects.all().order_by('sid')
-    context = {'students': students, 'g': '全部', 'm': '全部', 'b': '全部', }
+    context = {'students': students, 'g': '全部', 'm': '全部', 'b': '全部', 'x': '全部', 'tags': alltags }
     if request.GET:
         grade = request.GET['sgrade']
         major = request.GET['smajor']
         banji = request.GET['sbanji']
+        sex = request.GET['ssex']
         if grade != '全部':
             students = students.filter(sgrade=grade)
         if major != '全部':
             students = students.filter(smajor=major)
         if banji != '全部':
             students = students.filter(sbanji=banji)
-        context = {'students': students, 'g': grade, 'm': major, 'b': banji, }
+        if sex != '全部':
+            students = students.filter(ssex=sex)
+        context = {'students': students, 'g': grade, 'm': major, 'b': banji, 'x': sex, 'tags': alltags }
     return render(request, 'stdsys/list.html', context)
 
 
@@ -34,11 +38,13 @@ def student_detail(request, id):
     grade = request.GET['sgrade']
     major = request.GET['smajor']
     banji = request.GET['sbanji']
+    sex = request.GET['ssex']
     student = Student.objects.get(id=id)
     alltags = Tag.objects.all()
     nothavetags = alltags.difference(student.tag.all())
     # 需要传递给模板的对象
-    context = {'student': student, 'nothavetags': nothavetags, 'g': grade, 'm': major, 'b': banji, }
+    context = {'student': student, 'nothavetags': nothavetags,
+        'g': grade, 'm': major, 'b': banji, 'x': sex }
     # 载入模板，并返回context对象
     return render(request, 'stdsys/detail.html', context)
 
@@ -74,29 +80,38 @@ def student_import(request):
                 #     grade = Grade()
                 #     grade.gname = student.sgrade
                 #     grade.save()
-                # if not Major.objects.filter(mname=student.smajor).exists():                
+                # if not Major.objects.filter(mname=student.smajor).exists():
                 #     major = Major()
                 #     major.mname = student.smajor
                 #     major.save()
-                # if not Banji.objects.filter(bname=student.sbanji).exists():                
+                # if not Banji.objects.filter(bname=student.sbanji).exists():
                 #     banji = Banji()
                 #     banji.bname = student.sbanji
                 #     banji.save()
                 student.tag.add(t)
             return redirect("/stdsys/student-list")
 
+
 def student_tag_add(request, sid, tid):
+    grade = request.GET['sgrade']
+    major = request.GET['smajor']
+    banji = request.GET['sbanji']
+    sex = request.GET['ssex']
     student = Student.objects.get(id=sid)
     tag = Tag.objects.get(id=tid)
     student.tag.add(tag)
-    url = '/stdsys/student-detail/' + str(sid)
+    url = '/stdsys/student-detail/' + str(sid) + '/' + '?sgrade=' + grade +'&smajor=' + major + '&sbanji=' + banji + '&ssex=' + sex
     return redirect(url)
 
 def student_tag_del(request, sid, tid):
+    grade = request.GET['sgrade']
+    major = request.GET['smajor']
+    banji = request.GET['sbanji']
+    sex = request.GET['ssex']
     student = Student.objects.get(id=sid)
     tag = Tag.objects.get(id=tid)
     student.tag.remove(tag)
-    url = '/stdsys/student-detail/' + str(sid)
+    url = '/stdsys/student-detail/' + str(sid) + '/' + '?sgrade=' + grade +'&smajor=' + major + '&sbanji=' + banji + '&ssex=' + sex
     return redirect(url)
 
 

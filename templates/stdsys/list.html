@@ -12,59 +12,123 @@
   <div class="mdui-row">
     <div class="mdui-m-t-3 mdui-col">
       <div class="row">
-        <div class="mdui-col-lg-1"><h3>筛选条件</h3></div>
-        <div class="mdui-col-lg-10">
-        
-
-
-
-            <form method="get" action="{% url 'stdsys:student_list'%}">
-  
-                  <label for="sgrade">年级: </label>
-                  <select class="mdui-select" mdui-select name="sgrade" id="sgrade">
-                    <option>全部</option>
-                    <option>15</option>
-                    <option>16</option>
-                    <option>17</option>
-                    <option>18</option>
-                  </select>
-
-    
-                  <label for="smajor">专业: </label>
-                  <select class="mdui-select" mdui-select name="smajor" id="smajor">
-                    <option>全部</option>
-                    <option>采矿工程</option>
-                    <option>工业工程</option>
-                    <option>安全工程</option>
-                    <option>工程力学</option>
-                  </select>
-   
+        <div class="mdui-col-lg-1">
+          <h3>筛选条件</h3>
+        </div>
+        <div class="mdui-col-lg-7 mdui-center">
+          <form method="get" action="{% url 'stdsys:student_list'%}">
+            <label for="sgrade">年级: </label>
+            <select class="mdui-select" mdui-select name="sgrade" id="sgrade">
+              <option>全部</option>
+              <option
+              {% if g == '15' %}
+              selected
+              {% endif %}
+              >15</option>
+              <option
+              {% if g == '16' %}
+              selected
+              {% endif %}
+              >16</option>
+              <option
+              {% if g == '17' %}
+              selected
+              {% endif %}
+              >17</option>
+              <option
+              {% if g == '18' %}
+              selected
+              {% endif %}
+              >18</option>
+            </select>
+            <label for="smajor">专业: </label>
+            <select class="mdui-select" mdui-select name="smajor" id="smajor">
+              <option>全部</option>
+              <option
+              {% if m == '采矿工程' %}
+              selected
+              {% endif %}
+              >采矿工程</option>
+              <option
+              {% if m == '工业工程' %}
+              selected
+              {% endif %}
+              >工业工程</option>
+              <option
+              {% if m == '安全工程' %}
+              selected
+              {% endif %}
+              >安全工程</option>
+              <option
+              {% if m == '工程力学' %}
+              selected
+              {% endif %}
+              >工程力学</option>
+            </select>
+            <label for="sbanji">班级: </label>
+            <select class="mdui-select" mdui-select name="sbanji" id="sbanji">
+              <option>全部</option>
+              <option
+              {% if b == '1' %}
+              selected
+              {% endif %}
+              >1</option>
+              <option
+              {% if b == '2' %}
+              selected
+              {% endif %}
+              >2</option>
+              <option
+              {% if b == '3' %}
+              selected
+              {% endif %}
+              >3</option>
+              <option
+              {% if b == '4' %}
+              selected
+              {% endif %}
+              >4</option>
+              <option
+              {% if b == '5' %}
+              selected
+              {% endif %}
+              >5</option>
+              <option
+              {% if b == '6' %}
+              selected
+              {% endif %}
+              >6</option>
+            </select>
+            <label for="ssex">性别: </label>
+            <select class="mdui-select" mdui-select name="ssex" id="ssex">
+              <option>全部</option>
+              <option
+              {% if x == '男' %}
+              selected
+              {% endif %}
+              >男</option>
+              <option
+              {% if x == '女' %}
+              selected
+              {% endif %}
+              >女</option>
+            </select>
+            <button type="submit" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">筛选</button>
+          </form>
+        </div>
+        <div class="mdui-col-lg-4 mdui-center">
      
-                  <label for="sbanji">班级: </label>
-                  <select class="mdui-select" mdui-select name="sbanji" id="sbanji">
-                    <option>全部</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                  </select>
-       
-    
+              {% for tag in tags %}
+              {% if tag.tname != '学生' and tag.tdisplay %}
+
+                <button onclick="tagfilter('{{ tag.tname }}')" type="button" class="mdui-btn-dense mdui-btn mdui-btn-raised mdui-ripple">{{ tag.tname }}</button>
+                {% endif %}
+
+                {% endfor %}
       
-                  <button type="submit" class="btn btn-primary">筛选</button>
-      
-              </form>
-
-
-
-
-
-
+        </div>
       </div>
-      </div>
-      <div class="mdui-col">
+      <div class="mdui-col mdui-m-t-2">
         <div class="mdui-table-fluid">
           <table class="mdui-table mdui-table-hoverable">
             <thead>
@@ -76,7 +140,8 @@
             </thead>
             <tbody>
               {% for student in students %}
-              <tr onclick="location='{% url 'stdsys:student_detail' student.id %}?sgrade={{ g }}&smajor={{ m }}&sbanji={{ b }}'">
+              <tr
+                onclick="location='{% url 'stdsys:student_detail' student.id %}?sgrade={{ g }}&smajor={{ m }}&sbanji={{ b }}&ssex={{ x }}'">
                 <td>{{ student.sid }}</td>
                 <td>
                   <div class="mdui-typo">
@@ -104,85 +169,24 @@
     </div>
   </div>
 </div>
+<button id="buttonx" onclick="javascript: $$('tr').removeClass('mdui-hidden');$$('#buttonx').addClass('mdui-hidden');"class="mdui-hidden mdui-fab mdui-fab-fixed mdui-color-theme-accent mdui-ripple"><i
+  class="mdui-icon material-icons">reply</i></button>
+<script>
+  var $$ = mdui.JQ;
+  function tagfilter(tname){
+    var $tname = tname;
+    $$('tr').addClass('mdui-hidden');
+    $$('thead').children('tr').removeClass('mdui-hidden');
+    $$('#buttonx').removeClass('mdui-hidden');
+
+
+$$('td').has('span').children('span').each(function(i, element) {
+
+  if($$(this).html()==$tname){
+    $$(this).parents('tr').removeClass('mdui-hidden');
+  };
+});
+}
+</script>
+
 {% endblock content %}
-<div class="container-fluid">
-  <div class="row my-5 justify-content-center">
-    <div class="col-12">
-      <div class="container">
-        <form class="row" method="get" action="{% url 'stdsys:student_list'%}">
-          <div class="form-group col-2">
-            <label for="sgrade">年级 : {{ g }}</label>
-            <select class="form-control" name="sgrade" id="sgrade">
-              <option>全部</option>
-              <option>15</option>
-              <option>16</option>
-              <option>17</option>
-              <option>18</option>
-            </select>
-          </div>
-          <div class="form-group col-2">
-            <label for="smajor">专业 : {{ m }}</label>
-            <select class="form-control" name="smajor" id="smajor">
-              <option>全部</option>
-              <option>采矿工程</option>
-              <option>工业工程</option>
-              <option>安全工程</option>
-              <option>工程力学</option>
-            </select>
-          </div>
-          <div class="form-group col-2">
-            <label for="sbanji">班级 : {{ b }}</label>
-            <select class="form-control" name="sbanji" id="sbanji">
-              <option>全部</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-            </select>
-          </div>
-          <div class="form-group col-2">
-
-            <button type="submit" class="btn btn-primary">筛选</button>
-
-          </div>
-        </form>
-      </div>
-    </div>
-
-
-
-
-
-
-
-  </div>
-</div>
-
-
-
-
-
-<select class="mdui-select" mdui-select>
-    <option value="1">State 1</option>
-    <option value="2">State 2</option>
-    <option value="3" disabled>State 3</option>
-    <option value="4">State 4</option>
-    <option value="5">State 5</option>
-    <option value="6">State 6</option>
-  </select><select class="mdui-select" mdui-select>
-    <option value="1">State 1</option>
-    <option value="2">State 2</option>
-    <option value="3" disabled>State 3</option>
-    <option value="4">State 4</option>
-    <option value="5">State 5</option>
-    <option value="6">State 6</option>
-  </select><select class="mdui-select" mdui-select>
-    <option value="1">State 1</option>
-    <option value="2">State 2</option>
-    <option value="3" disabled>State 3</option>
-    <option value="4">State 4</option>
-    <option value="5">State 5</option>
-    <option value="6">State 6</option>
-  </select>
